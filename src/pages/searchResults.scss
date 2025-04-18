@@ -1,0 +1,39 @@
+.search-results {
+    padding: 20px;
+    text-align: center;
+  
+    .error-message {
+      color: red;
+      font-weight: bold;
+    }
+  
+    .results-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+  
+    .result-item {
+      cursor: pointer;
+      width: 200px;
+      transition: transform 0.3s ease;
+    }
+  
+    .result-item:hover {
+      transform: scale(1.05);
+    }
+  
+    img {
+      width: 100%;
+      border-radius: 10px;
+    }
+  
+    p {
+      margin-top: 10px;
+      font-size: 1rem;
+      font-weight: bold;
+    }
+  }
+  
