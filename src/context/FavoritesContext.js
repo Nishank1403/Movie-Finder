@@ -5,13 +5,16 @@ const FavoritesContext = createContext();
 export const FavoritesProvider = ({ children }) => {
   const [favorites, setFavorites] = useState([]);
 
-  
   useEffect(() => {
-    const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
-    setFavorites(storedFavorites);
+    try {
+      const storedFavorites = JSON.parse(localStorage.getItem("favorites"));
+      setFavorites(Array.isArray(storedFavorites) ? storedFavorites : []);
+    } catch {
+      setFavorites([]);
+      localStorage.removeItem("favorites");
+    }
   }, []);
 
-  
   useEffect(() => {
     localStorage.setItem("favorites", JSON.stringify(favorites));
   }, [favorites]);
@@ -29,13 +32,16 @@ export const FavoritesProvider = ({ children }) => {
     setFavorites((prevFavorites) => prevFavorites.filter((fav) => fav.id !== movieId));
   };
 
+  const isFavorite = (movieId) => favorites.some((fav) => fav.id === movieId);
+
   return (
-    <FavoritesContext.Provider value={{ favorites, addToFavorites, removeFromFavorites }}>
+    <FavoritesContext.Provider
+      value={{ favorites, addToFavorites, removeFromFavorites, isFavorite }}
+    >
       {children}
     </FavoritesContext.Provider>
   );
 };
-
 
 export const useFavorites = () => {
   const context = useContext(FavoritesContext);
