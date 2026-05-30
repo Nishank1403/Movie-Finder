@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 const FavoritesContext = createContext();
+const getFavoriteKey = (movie) => `${movie.category || "movie"}-${movie.id}`;
 
 export const FavoritesProvider = ({ children }) => {
   const [favorites, setFavorites] = useState([]);
@@ -21,18 +22,21 @@ export const FavoritesProvider = ({ children }) => {
 
   const addToFavorites = (movie) => {
     setFavorites((prevFavorites) => {
-      if (!prevFavorites.some((fav) => fav.id === movie.id)) {
+      if (!prevFavorites.some((fav) => getFavoriteKey(fav) === getFavoriteKey(movie))) {
         return [...prevFavorites, movie]; 
       }
       return prevFavorites; 
     });
   };
 
-  const removeFromFavorites = (movieId) => {
-    setFavorites((prevFavorites) => prevFavorites.filter((fav) => fav.id !== movieId));
+  const removeFromFavorites = (movie) => {
+    setFavorites((prevFavorites) =>
+      prevFavorites.filter((fav) => getFavoriteKey(fav) !== getFavoriteKey(movie))
+    );
   };
 
-  const isFavorite = (movieId) => favorites.some((fav) => fav.id === movieId);
+  const isFavorite = (movieId, movieCategory) =>
+    favorites.some((fav) => getFavoriteKey(fav) === getFavoriteKey({ id: movieId, category: movieCategory }));
 
   return (
     <FavoritesContext.Provider

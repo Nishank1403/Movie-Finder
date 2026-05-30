@@ -15,7 +15,7 @@ const Favorites = () => {
       ) : (
         <div className="favorites-grid">
           {favorites.map((movie) => (
-            <div key={movie.id} className="favorite-item">
+            <div key={`${movie.category || "movie"}-${movie.id}`} className="favorite-item">
               <Link to={`/react-movie-app/${movie.category}/${movie.id}`}>
                 <img
                   src={
@@ -34,7 +34,7 @@ const Favorites = () => {
               <button
                 type="button"
                 className="remove-favorite-btn"
-                onClick={() => removeFromFavorites(movie.id)}
+                onClick={() => removeFromFavorites(movie)}
               >
                 Remove from Favorites
               </button>

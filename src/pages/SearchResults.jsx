@@ -22,7 +22,10 @@ const SearchResults = () => {
         )}`;
         const response = await axios.get(apiUrl);
         setSearchResults(response.data.results.length > 0 ? response.data.results : null);
-      } catch {
+      } catch (error) {
+        if (process.env.NODE_ENV !== "production") {
+          console.error("Search request failed:", error);
+        }
         setError("Something went wrong. Please try again.");
       } finally {
         setLoading(false);
@@ -58,7 +61,12 @@ const SearchResults = () => {
               onClick={() => handleItemClick(item)}
               role="button"
               tabIndex={0}
-              onKeyDown={(event) => event.key === "Enter" && handleItemClick(item)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  handleItemClick(item);
+                }
+              }}
             >
               <img
                 src={

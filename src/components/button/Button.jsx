@@ -6,6 +6,8 @@ import "./button.scss";
 const Button = (props) => {
   return (
     <button
+      type={props.type || "button"}
+      {...(props.ariaLabel && { "aria-label": props.ariaLabel })}
       className={`btn ${props.className}`}
       onClick={props.onClick ? () => props.onClick() : null}
     >
@@ -26,7 +28,9 @@ export const OutlineButton = (props) => {
 };
 
 Button.propTypes = {
+  ariaLabel: PropTypes.string,
   onClick: PropTypes.func,
+  type: PropTypes.string,
 };
 
 export const FavoriteButton = ({ isFavorite, onClick }) => {
@@ -39,6 +43,11 @@ export const FavoriteButton = ({ isFavorite, onClick }) => {
       {isFavorite ? "❤️ Remove Favorite" : "🤍 Add to Favorite"}
     </button>
   );
+};
+
+FavoriteButton.propTypes = {
+  isFavorite: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default Button;

@@ -105,31 +105,24 @@ const MovieSearch = (props) => {
     }
   }, [keyword, props.category, navigate]);
 
-  useEffect(() => {
-    const enterEvent = (e) => {
-      e.preventDefault();
-      if (e.key === "Enter") {
-        goToSearch();
-      }
-    };
-    document.addEventListener("keyup", enterEvent);
-    return () => {
-      document.removeEventListener("keyup", enterEvent);
-    };
-  }, [goToSearch]);
-
   return (
-    <div className="movie-search">
+    <form
+      className="movie-search"
+      onSubmit={(event) => {
+        event.preventDefault();
+        goToSearch();
+      }}
+    >
       <Input
         type="text"
         placeholder="Enter keyword"
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
       />
-      <Button className="small" onClick={goToSearch}>
+      <Button className="small" type="submit" ariaLabel="Search by keyword">
         Search
       </Button>
-    </div>
+    </form>
   );
 };
 

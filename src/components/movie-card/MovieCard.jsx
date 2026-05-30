@@ -14,7 +14,7 @@ const MovieCard = (props) => {
   const link = "/" + Config.HOME_PAGE + "/" + categoryKey + "/" + item.id;
   const bg = apiConfig.w500Image(item.poster_path || item.backdrop_path);
   const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
-  const isFavoriteState = isFavorite(item.id);
+  const isFavoriteState = isFavorite(item.id, categoryKey);
 
   const toggleFavorite = () => {
    if (!isFavoriteState) {
@@ -25,7 +25,10 @@ const MovieCard = (props) => {
      return;
    }
 
-   removeFromFavorites(item.id);
+   removeFromFavorites({
+     id: item.id,
+     category: categoryKey,
+   });
   };
 
   return (

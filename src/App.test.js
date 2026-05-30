@@ -12,7 +12,7 @@ const FavoritesHarness = () => {
       <button type="button" onClick={() => addToFavorites(sampleMovie)}>
         Add
       </button>
-      <button type="button" onClick={() => removeFromFavorites(sampleMovie.id)}>
+      <button type="button" onClick={() => removeFromFavorites(sampleMovie)}>
         Remove
       </button>
       <span>{favorites.length}</span>
