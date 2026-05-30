@@ -36,8 +36,8 @@ const MovieList = (props) => {
   return (
     <div className="movie-list">
       <Swiper grabCursor={true} spaceBetween={10} slidesPerView={"auto"}>
-        {items.map((item, index) => (
-          <SwiperSlide key={index}>
+        {items.map((item) => (
+          <SwiperSlide key={item.id}>
             <MovieCard item={item} category={props.category} />
           </SwiperSlide>
         ))}
