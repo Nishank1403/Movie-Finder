@@ -42,7 +42,14 @@ function App() {
             <Route path="/react-movie-app/search/:query" element={<SearchResults />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/react-movie-app/favorites" element={<Favorites />} />
+            <Route
+              path="/react-movie-app/favorites"
+              element={
+                <PrivateRoute>
+                  <Favorites />
+                </PrivateRoute>
+              }
+            />
 
 
           </RouterRoutes>
