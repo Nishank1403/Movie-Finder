@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import "./movie-card.scss";
 
@@ -6,21 +6,26 @@ import Button, { FavoriteButton } from "../button/Button";
 import { category } from "../../api/tmdbApi";
 import apiConfig from "../../api/apiConfig";
 import * as Config from "./../../constants/Config";
+import { useFavorites } from "../../context/FavoritesContext";
 
 const MovieCard = (props) => {
   const item = props.item;
-  const link = "/" + Config.HOME_PAGE + "/" + category[props.category] + "/" + item.id;
+  const categoryKey = category[props.category];
+  const link = "/" + Config.HOME_PAGE + "/" + categoryKey + "/" + item.id;
   const bg = apiConfig.w500Image(item.poster_path || item.backdrop_path);
-
-  // Favorite State
-  const [isFavorite, setIsFavorite] = useState(
-    localStorage.getItem(`fav-${item.id}`) === "true"
-  );
+  const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
+  const isFavoriteState = isFavorite(item.id);
 
   const toggleFavorite = () => {
-    const newFavStatus = !isFavorite;
-    setIsFavorite(newFavStatus);
-    localStorage.setItem(`fav-${item.id}`, newFavStatus);
+   if (!isFavoriteState) {
+     addToFavorites({
+       ...item,
+       category: categoryKey,
+     });
+     return;
+   }
+
+   removeFromFavorites(item.id);
   };
 
   return (
@@ -34,8 +39,7 @@ const MovieCard = (props) => {
       </Link>
       <h3>{item.title || item.name}</h3>
 
-      {/* Favorite Button */}
-      <FavoriteButton isFavorite={isFavorite} onClick={toggleFavorite} />
+      <FavoriteButton isFavorite={isFavoriteState} onClick={toggleFavorite} />
     </div>
   );
 };
