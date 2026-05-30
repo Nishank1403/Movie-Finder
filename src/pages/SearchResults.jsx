@@ -17,17 +17,13 @@ const SearchResults = () => {
       setError(null);
 
       try {
-        const apiUrl = `https://api.themoviedb.org/3/search/multi?api_key=${apiConfig.apiKey}&query=${query}`;
+        const apiUrl = `https://api.themoviedb.org/3/search/multi?api_key=${apiConfig.apiKey}&query=${encodeURIComponent(
+          query
+        )}`;
         const response = await axios.get(apiUrl);
-
-        if (response.data.results.length === 0) {
-          setSearchResults(null); // No results found
-        } else {
-          setSearchResults(response.data.results);
-        }
-      } catch (err) {
+        setSearchResults(response.data.results.length > 0 ? response.data.results : null);
+      } catch {
         setError("Something went wrong. Please try again.");
-        console.error("Error fetching search results:", err);
       } finally {
         setLoading(false);
       }
@@ -37,7 +33,11 @@ const SearchResults = () => {
   }, [query]);
 
   const handleItemClick = (item) => {
-    const category = item.media_type === "movie" ? "movie" : "tv";
+    if (item.media_type !== "movie" && item.media_type !== "tv") {
+      return;
+    }
+
+    const category = item.media_type;
     navigate(`/react-movie-app/${category}/${item.id}`);
   };
 
@@ -53,9 +53,12 @@ const SearchResults = () => {
         {searchResults &&
           searchResults.map((item) => (
             <div
-              key={item.id}
+              key={`${item.media_type}-${item.id}`}
               className="result-item"
               onClick={() => handleItemClick(item)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(event) => event.key === "Enter" && handleItemClick(item)}
             >
               <img
                 src={
