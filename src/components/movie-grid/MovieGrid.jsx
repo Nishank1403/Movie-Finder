@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./movie-grid.scss";
-
-import { useHistory, useParams } from "react-router";
+import { useParams } from "react-router-dom";
 
 import MovieCard from "./../movie-card/MovieCard";
 
@@ -49,10 +48,11 @@ const MovieGrid = (props) => {
 
   const loadMore = async () => {
     let response = null;
+    const nextPage = page + 1;
 
     if (keyword === undefined) {
       const params = {
-        page: page + 1,
+        page: nextPage,
       };
       switch (props.category) {
         case category.movie:
@@ -65,13 +65,13 @@ const MovieGrid = (props) => {
       }
     } else {
       const params = {
-        page: page + 1,
+        page: nextPage,
         query: keyword,
       };
       response = await tmdbApi.search(props.category, { params });
     }
-    setItems([...items, ...response.results]);
-    setPage(page + 1);
+    setItems((prevItems) => [...prevItems, ...response.results]);
+    setPage(nextPage);
   };
 
   return (
@@ -80,8 +80,8 @@ const MovieGrid = (props) => {
         <MovieSearch category={props.category} keyword={keyword} />
       </div>
       <div className="movie-grid">
-        {items.map((item, index) => (
-          <MovieCard key={index} category={props.category} item={item} />
+        {items.map((item) => (
+          <MovieCard key={item.id} category={props.category} item={item} />
         ))}
       </div>
       {page < totalPage ? (
@@ -90,9 +90,7 @@ const MovieGrid = (props) => {
             Load more
           </OutlineButton>
         </div>
-      ) : (
-        ""
-      )}
+      ) : null}
     </>
   );
 };
@@ -110,7 +108,7 @@ const MovieSearch = (props) => {
   useEffect(() => {
     const enterEvent = (e) => {
       e.preventDefault();
-      if (e.keyCode === 13) {
+      if (e.key === "Enter") {
         goToSearch();
       }
     };
