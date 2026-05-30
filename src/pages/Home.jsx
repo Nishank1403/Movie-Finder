@@ -21,7 +21,6 @@ const Section = ({ title, link, category, type }) => (
 );
 
 const Home = () => {
-  console.log("HOME_PAGE:", Config.HOME_PAGE);
   return (
     <>
       <HeroSlide />

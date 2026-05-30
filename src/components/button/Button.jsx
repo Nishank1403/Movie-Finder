@@ -29,24 +29,16 @@ Button.propTypes = {
   onClick: PropTypes.func,
 };
 
-export const FavoriteButton = ({ isFavorite, onClick, movie, category }) => {
+export const FavoriteButton = ({ isFavorite, onClick }) => {
   return (
     <button
+      type="button"
       className="favorite-btn"
-      onClick={() => {
-        console.log("Favorite clicked:", movie);
-        onClick();
-      }}
+      onClick={onClick}
     >
       {isFavorite ? "❤️ Remove Favorite" : "🤍 Add to Favorite"}
     </button>
   );
-};
-
-
-
-Button.propTypes = {
-  onClick: PropTypes.func,
 };
 
 export default Button;
